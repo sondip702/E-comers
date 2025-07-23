@@ -18,6 +18,11 @@ const authSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  role:{
+    type: String,
+    default: "user",
+    enum: ["user", "admin"]
+  }
 }); 
 const Auth = mongoose.model("Auth", authSchema);
 
