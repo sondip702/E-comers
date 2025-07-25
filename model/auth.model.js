@@ -30,7 +30,7 @@ const authSchema = new mongoose.Schema({
   refreshToken: {
     type: String,
     default: null,
-  }
+  },
 }); 
 const Auth = mongoose.model("Auth", authSchema);
 
