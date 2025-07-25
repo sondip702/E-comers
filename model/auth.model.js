@@ -22,6 +22,14 @@ const authSchema = new mongoose.Schema({
     type: String,
     default: "user",
     enum: ["user", "admin"]
+  },
+  accessToken: {
+    type: String,
+    default: null,
+  },
+  refreshToken: {
+    type: String,
+    default: null,
   }
 }); 
 const Auth = mongoose.model("Auth", authSchema);
