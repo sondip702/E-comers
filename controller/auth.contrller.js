@@ -46,6 +46,27 @@ export const login = async (req, res) => {
     // Compare password using bcrypt
     // Generate and send JWT + Refresh Token
     // Optional: log login time/IP
+    const { email, password } = req.body;
+    try{
+        if(!email || !password) {
+            return res.status(400).json({ message: "Email and password are required" });
+        }
+        const user = await Auth.find({email});
+
+        if(!user){
+            return res.status(400).json({ message: "email or password is incorrect" });
+        }
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if(!isPasswordValid) {
+            return res.status(400).json({ message: "Invalid email or password" });
+        }
+        
+
+    } catch (error) {   
+        console.error(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+        
 }
 export const signout = async (req, res) => {
     // Implementation for login
