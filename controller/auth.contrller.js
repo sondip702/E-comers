@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import Auth from "../model/auth.model.js";
+import { generateTokens } from '../utility/genaratortoken.js';
 
 export const signup = async (req, res) => {
     const { name, email, password } = req.body;
@@ -41,17 +42,12 @@ export const signup = async (req, res) => {
 }
 
 export const login = async (req, res) => {
-    // Implementation for login
-    // Validate email and password
-    // Compare password using bcrypt
-    // Generate and send JWT + Refresh Token
-    // Optional: log login time/IP
     const { email, password } = req.body;
     try{
         if(!email || !password) {
             return res.status(400).json({ message: "Email and password are required" });
         }
-        const user = await Auth.find({email});
+        const user = await Auth.findOne({email});
 
         if(!user){
             return res.status(400).json({ message: "email or password is incorrect" });
@@ -60,12 +56,26 @@ export const login = async (req, res) => {
         if(!isPasswordValid) {
             return res.status(400).json({ message: "Invalid email or password" });
         }
-        
+        const tokens = generateTokens(user);     
+        console.log(tokens);
+        res.status(200).json({
+            accessToken: tokens.accessToken,
+            refreshToken: tokens.refreshToken,
+            user: {
+                _id: user._id,
+                name: user.name,
+                email: user.email
+            }
+            
+        });
 
     } catch (error) {   
         console.error(error);
         res.status(500).json({ message: "Internal server error" });
     }
+    
+        
+        
         
 }
 export const signout = async (req, res) => {
