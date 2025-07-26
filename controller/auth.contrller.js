@@ -53,7 +53,10 @@ export const login = async (req, res) => {
         if(!isPasswordValid) {
             return res.status(400).json({ message: "Invalid email or password" });
         }
-        const tokens = generateTokens(user);     
+        const tokens = generateTokens(user);
+        user.accessToken = tokens.accessToken;
+        user.refreshToken = tokens.refreshToken;
+        await user.save();     
         res.status(200).json({
             accessToken: tokens.accessToken,
             refreshToken: tokens.refreshToken,
@@ -73,6 +76,7 @@ export const login = async (req, res) => {
 export const signout = async (req, res) => {
     // Implementation for login
     // Blacklist refresh token or clear cookie
+
 };
 export const forgetPassword = async (req, res) => {
     // Implementation for forget password
