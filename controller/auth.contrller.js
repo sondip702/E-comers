@@ -53,13 +53,25 @@ export const login = async (req, res) => {
         if(!isPasswordValid) {
             return res.status(400).json({ message: "Invalid email or password" });
         }
+        
+        const options = {
+                    httpOnly: true,
+                    secure: true
+                };
         const tokens = generateTokens(user);
+
         user.accessToken = tokens.accessToken;
         user.refreshToken = tokens.refreshToken;
-        await user.save();     
-        res.status(200).json({
+        await user.save(); 
+
+        
+        return res.status(200)
+        .cookie('accessToken', tokens.accessToken, options)
+        .cookie('refreshToken', tokens.refreshToken, options)
+        .json({
             accessToken: tokens.accessToken,
             refreshToken: tokens.refreshToken,
+            options,
             user: {
                 _id: user._id,
                 name: user.name,
@@ -76,6 +88,7 @@ export const login = async (req, res) => {
 export const signout = async (req, res) => {
     // Implementation for login
     // Blacklist refresh token or clear cookie
+    
 
 };
 export const forgetPassword = async (req, res) => {
