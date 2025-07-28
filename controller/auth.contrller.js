@@ -63,7 +63,7 @@ export const login = async (req, res) => {
 
         const options = {
                     httpOnly: true,
-                    secure: true
+                    secure: false, // set to false for local development
                 };
         return res.status(200)
         .cookie('accessToken', tokens.accessToken, options)
@@ -99,7 +99,8 @@ export const signout = async (req, res) => {
                     httpOnly: true,
                     secure: true
                 }
-    return res.status(200)
+    return res
+    .status(200)
     .clearCookie('accessToken', options)
     .clearCookie('refreshToken', options)
     .json({ message: "User signed out successfully" })
