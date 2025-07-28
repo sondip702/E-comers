@@ -1,5 +1,6 @@
 import express from 'express';
-import { login, signup } from '../controller/auth.contrller.js';
+import { login, signout, signup } from '../controller/auth.contrller.js';
+import { verifyUser } from '../utility/auth.middleware.js';
 
 const router = express.Router();
 
@@ -7,7 +8,7 @@ router.post('/signup', signup)
 
 router.get('/login', login)
 
-// router.post('/signout', signout)
+router.post('/signout', verifyUser, signout)
 
 // router.get('/forget-password', forgetPassword)
 
