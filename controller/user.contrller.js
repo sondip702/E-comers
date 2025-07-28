@@ -7,3 +7,13 @@ export const updateProfile = async (req, res) => {
 export const updatePassword = async (req, res) => {
     // Implementation for updating user password
 }
+
+    // Admin-only:
+
+    // getAllUsers()
+
+    // getSingleUser(id)
+
+    // updateUserRole(id, role)
+
+    // deleteUser(id)
