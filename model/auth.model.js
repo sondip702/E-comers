@@ -34,4 +34,6 @@ const authSchema = new mongoose.Schema({
 }); 
 const Auth = mongoose.model("Auth", authSchema);
 
+
+
 export default Auth;
