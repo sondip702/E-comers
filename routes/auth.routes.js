@@ -11,11 +11,11 @@ router.get('/login', login)
 
 router.post('/signout', verifyUser, signout)
 
+router.get('/profile', verifyUser, profile)
+
 // router.get('/forget-password', forgetPassword)
 
 // router.post('/reset-password/:token', resetPassword)
-
-router.get('/profile', verifyUser,profile)
 
 // router.put('/profile', updateProfile)
 

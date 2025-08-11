@@ -1,5 +1,5 @@
 // createProduct()
-const createProduct = async (req, res) => {
+export const createProduct = async (req, res) => {
     try {
         const product = new Product(req.body);
         await product.save();
