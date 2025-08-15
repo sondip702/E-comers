@@ -15,7 +15,7 @@ const shopSchema = new mongoose.Schema({
     required: true,
   },
   contactNumber: {
-      type: String,
+      type: Number,
       required: true,
   },
   price: {
@@ -26,10 +26,7 @@ const shopSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  products: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Product",
-  }],
+
   isActive: {
     type: Boolean,
     default: true,

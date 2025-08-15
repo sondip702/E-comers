@@ -1,34 +1,38 @@
-import product from '../model/product.model.js';
+import Shop from '../model/shop.model.js';
 export const createProduct = async (req, res) => {
     try{
-        const { name, price, shop } = req.body;
-        console.log(name, price, shop);
-        if (!name || !price || !shop) {
+        const {  name, address, owner, contactNumber, price, createdAt  } = req.body;
+        if (!name || !address || !contactNumber || !price) {
             return res.status(400).json({ message: 'Name, price, and shop are required.' });
         }
-
-        const existingShop = await product.findById(shop);
-        if (!existingShop) {
-            return res.status(404).json({ message: 'Shop not found.' });
+        const existingShop = await Shop.findOne({name});
+        if (existingShop) {
+            return res.status(400).json({ message: 'Shop already created.' });
         }
 
-        const productname = new product({
-            name,
-            price,
-            shop,
-            isActive: true,
+        const productname = new Shop({
+        name,
+        address,
+        owner: req.user._id,
+        contactNumber,
+        createdAt: createdAt || Date.now(),
+        price,
+        isActive: true,
         });
-        console.log(productname);
+        await productname.save();
 
-        const product = await productname.save();
 
-        res.status(201).json({ message: 'Product created successfully.', product:productname });
+        res.status(201)
+        .json({ message: 'Product created successfully.',
+              data: productname,
+        });
     } catch (error) {
         res.status(500).json({ message: 'Internal server error.' });
     }
 };
 
 // updateProduct(id)
+
 
 // deleteProduct(id)
 
