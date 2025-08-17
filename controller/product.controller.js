@@ -31,8 +31,29 @@ export const createProduct = async (req, res) => {
     }
 };
 
-// updateProduct(id)
+export const updateProduct = async (req, res) => {
+    try{
+        const { id } = req.params;
+        const { name, address, contactNumber, price } = req.body;
+        if (!name || !address || !contactNumber || !price) {
+            return res.status(400).json({ message: 'Name, address, contact number, and price are required.' });
+        }
+        const product = await Shop.findById(id);
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found.' });
+        }
+        product.name = name;
+        product.address = address;
+        product.contactNumber = contactNumber;
+        product.price = price;
+        await product.save();
+        res.status(200).json({ message: 'Product updated successfully.', data: product });
 
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error.' });
+    }
+}
 
 // deleteProduct(id)
 
