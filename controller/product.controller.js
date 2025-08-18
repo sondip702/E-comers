@@ -27,6 +27,7 @@ export const createProduct = async (req, res) => {
               data: productname,
         });
     } catch (error) {
+        console.error(error);
         res.status(500).json({ message: 'Internal server error.' });
     }
 };
@@ -42,11 +43,21 @@ export const updateProduct = async (req, res) => {
         if (!product) {
             return res.status(404).json({ message: 'Product not found.' });
         }
-        product.name = name;
-        product.address = address;
-        product.contactNumber = contactNumber;
-        product.price = price;
-        await product.save();
+        const findandU = await Shop.findByIdAndUpdate(
+            id,
+            {
+                $set: {
+                    name,
+                    address,
+                    contactNumber,
+                    price,
+                },
+                
+            },{new: true},
+        ).select('-password');
+        if (!findandU) {
+            return res.status(404).json({ message: 'Product not found.' });
+        }
         res.status(200).json({ message: 'Product updated successfully.', data: product });
 
     } catch (error) {
