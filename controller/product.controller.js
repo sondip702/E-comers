@@ -66,7 +66,6 @@ export const updateProduct = async (req, res) => {
     }
 }
 
-// deleteProduct(id)
 export const deleteProduct = async (req, res) => {
     try {
         const { id } = req.params;
