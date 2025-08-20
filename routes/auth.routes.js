@@ -1,5 +1,5 @@
 import express from 'express';
-import { login, signout, signup } from '../controller/auth.contrller.js';
+import { forgetPassword, login, resetPassword, signout, signup } from '../controller/auth.contrller.js';
 import { verifyUser } from '../utility/auth.middleware.js';
 import { profile } from '../controller/user.contrller.js';
 
@@ -13,9 +13,9 @@ router.post('/signout', verifyUser, signout)
 
 router.get('/profile', verifyUser, profile)
 
-// router.get('/forget-password', forgetPassword)
+router.post('/forget-password', forgetPassword)
 
-// router.post('/reset-password/:token', resetPassword)
+router.post('/reset-password/:token', resetPassword)
 
 // router.put('/profile', updateProfile)
 

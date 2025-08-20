@@ -32,14 +32,16 @@ const authSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+  resettoken: String,
+  resetTokenExpiry: Date,
 }); 
 
-authSchema.pre('save', function(next) {
-  if (this.isModified('password')) {
-    this.password = bcrypt.hashSync(this.password, 10);
-  }
-  next();
-});
+// authSchema.pre('save', function(next) {
+//   if (this.isModified('password')) {
+//     this.password = bcrypt.hashSync(this.password, 10);
+//   }
+//   next();
+// });
 
 const Auth = mongoose.model("Auth", authSchema);
 
