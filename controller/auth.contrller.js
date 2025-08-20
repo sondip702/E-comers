@@ -138,7 +138,6 @@ export const forgetPassword = async (req, res) => {
                 pass: process.env.EMAIL_PASSWORD
             }
         }); 
-        console.log(process.env.EMAIL, process.env.EMAIL_PASSWORD);
         const resetLink = `http://localhost:3000/api/user/reset-password/${token}`;
         await tranceports.sendMail({
             to: user.email,
