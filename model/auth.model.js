@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 
 const authSchema = new mongoose.Schema({
@@ -32,6 +33,14 @@ const authSchema = new mongoose.Schema({
     default: null,
   },
 }); 
+
+authSchema.pre('save', function(next) {
+  if (this.isModified('password')) {
+    this.password = bcrypt.hashSync(this.password, 10);
+  }
+  next();
+});
+
 const Auth = mongoose.model("Auth", authSchema);
 
 
