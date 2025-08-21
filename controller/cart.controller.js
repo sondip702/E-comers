@@ -14,7 +14,7 @@ export const addToCart = async (req, res) => {
         if (productIndex > -1) {
             cart.products[productIndex].quantity += quantity;
         } else {
-            cart.products.push({ product: productId, quantity, price: 0 }); // Assuming price will be set later
+            cart.products.push({ product: productId, quantity, price: 0 }); 
         }
         cart.totalPrice = cart.products.reduce((total, item) => total + (item.price * item.quantity), 0);
         await cart.save();
@@ -41,5 +41,5 @@ export const getUserCart = async (req, res) => {
 }
 // emptyCart()
 export const emptyCart = async (req, res) => {
-    
+
 }
