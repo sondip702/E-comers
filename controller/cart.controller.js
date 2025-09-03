@@ -3,7 +3,7 @@ import Cart from "../model/cart.model.js";
 export const addToCart = async (req, res) => {
   
     try {
-        const { productId, quantity } = req.body;
+        const { productId, quantity, price } = req.body;
 
         const userId = req.user.id;
 
@@ -18,8 +18,10 @@ export const addToCart = async (req, res) => {
 
         if (productIndex > -1) {
             cart.products[productIndex].quantity += quantity;
+            cart.products[productIndex].price += price;
+
         } else {
-            cart.products.push({ product: productId, quantity, price: 0 }); 
+            cart.products.push({ product: productId, quantity, price: product.price }); 
         }
 
         cart.totalPrice = cart.products.reduce((total, item) => total + (item.price * item.quantity), 0);
@@ -27,8 +29,8 @@ export const addToCart = async (req, res) => {
         await cart.save();
 
         res.status(200).json({ message: "Product added to cart", cart });
-    } catch (error) {
-        console.error("Error adding to cart:", error);
+    } catch  {
+        console.error("Error adding to cart:");
         res.status(500).json({ message: "Internal server error" });
     }
 }
@@ -36,7 +38,7 @@ export const addToCart = async (req, res) => {
 // updateCartItem(cartItemId, quantity)
 export const updateCartItem = async (req, res) => {
     try{
-        const { productId, quantity } = req.body;
+        const { productId, quantity, price } = req.body;
         const userId = req.user.id;
 
         let cart = await Cart.findOne({ user: userId });
@@ -51,21 +53,47 @@ export const updateCartItem = async (req, res) => {
         }
         
         cart.products[productIndex].quantity = quantity;
+        cart.products[productIndex].price = price; 
+        
         
         cart.totalPrice = cart.products.reduce((total, item) => total + (item.price * item.quantity), 0);
         
         await cart.save();
         res.status(200).json({ message: "Cart item updated", cart });
 
-    }catch(error){
-        console.error("Error updating cart item:", error);
+    }catch{
+        console.error("Error updating cart item:");
         res.status(500).json({ message: "Internal server error" });
     }
 }
 
 // removeCartItem(cartItemId)
 export const removeCartItem = async (req, res) => {
+    try{        
+        const userId = req.user.id;
+        const { productId } = req.body;
+        
+        let cart = await Cart.findOne({ user: userId });
+        if (!cart) {
+            return res.status(404).json({ message: "Cart not found" });
+        }
 
+        const productIndex = cart.products.map(p => p.id.toString() === productId).indexOf(true);
+        
+        if (productIndex === -1) {
+            return res.status(404).json({ message: "Cart item not found" });
+        }
+        
+        cart.products.splice(productIndex, 1);
+        
+        cart.totalPrice = cart.products.reduce((total, item) => total + (item.price * item.quantity), 0);
+        
+        await cart.save();
+        res.status(200).json({ message: "Cart item removed", cart });
+    }catch{
+        console.error("Error removing cart item:");
+        res.status(500).json({ message: "Internal server error" });
+    }
 }
 
 // getUserCart()
