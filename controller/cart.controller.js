@@ -1,9 +1,10 @@
+import { error } from "console";
 import Cart from "../model/cart.model.js";
 // addToCart(productId, quantity)
 export const addToCart = async (req, res) => {
   
     try {
-        const { productId, quantity, price } = req.body;
+        const { productId, quantity } = req.body;
 
         const userId = req.user.id;
 
@@ -18,10 +19,9 @@ export const addToCart = async (req, res) => {
 
         if (productIndex > -1) {
             cart.products[productIndex].quantity += quantity;
-            cart.products[productIndex].price += price;
 
         } else {
-            cart.products.push({ product: productId, quantity, price: product.price }); 
+            cart.products.push({ product: productId, quantity, price: 0 }); 
         }
 
         cart.totalPrice = cart.products.reduce((total, item) => total + (item.price * item.quantity), 0);
@@ -71,25 +71,16 @@ export const updateCartItem = async (req, res) => {
 export const removeCartItem = async (req, res) => {
     try{        
         const userId = req.user.id;
-        const { productId } = req.body;
-        
         let cart = await Cart.findOne({ user: userId });
         if (!cart) {
             return res.status(404).json({ message: "Cart not found" });
         }
 
-        const productIndex = cart.products.map(p => p.id.toString() === productId).indexOf(true);
-        
-        if (productIndex === -1) {
-            return res.status(404).json({ message: "Cart item not found" });
-        }
-        
-        cart.products.splice(productIndex, 1);
-        
-        cart.totalPrice = cart.products.reduce((total, item) => total + (item.price * item.quantity), 0);
-        
+        cart.products = [];
+        cart.totalPrice = 0;
+
         await cart.save();
-        res.status(200).json({ message: "Cart item removed", cart });
+        res.status(200).json({ message: "All cart items removed", cart });
     }catch{
         console.error("Error removing cart item:");
         res.status(500).json({ message: "Internal server error" });
@@ -98,9 +89,15 @@ export const removeCartItem = async (req, res) => {
 
 // getUserCart()
 export const getUserCart = async (req, res) => {
-
-}
-// emptyCart()
-export const emptyCart = async (req, res) => {
-
+    try {
+        const userId = req.user.id;
+        const cart = await Cart.findOne({ user: userId });
+        if (!cart) {
+            return res.status(404).json({ message: "Cart not found" });
+        }
+        res.status(200).json(cart);
+    } catch (error){
+        console.error("Error fetching user cart:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }   
 }
