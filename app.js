@@ -5,6 +5,7 @@ import { connectDB } from './db/db.js';
 import cookieParser from 'cookie-parser';
 import product from './routes/product.route.js';
 import cart from './routes/cart.route.js';
+import category from './routes/category.route.js';
 
 const app = express();
 dotenv.config();
@@ -19,6 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/user', router);
 app.use('/api/products', product);
 app.use('/api/cart', cart);
+app.use('/api/category', category);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
