@@ -60,9 +60,9 @@ export const deleteCategory = (req, res) => {
       }
 };
 
-export const getAllCategories = (req, res) => {
+export const getAllCategories = async(req, res) => {
     try {
-        const categories = Category.find();
+        const categories =await Category.find();
         return res.status(200).json(categories);
       } catch (error) {
         console.error("Error fetching categories:", error);
