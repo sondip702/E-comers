@@ -1,4 +1,3 @@
-// createCategory()
 import Category from '../model/category.model.js';
 
 
@@ -29,14 +28,45 @@ export const createCategory = async(req, res) => {
   }
 };
 
-export const updateCategory = (id, updatedData) => {
-  const category = Category.findByIdAnd
+export const updateCategory = (req, res) => {
+  try {
+    const {name, description} = Category.findByIdAndUpdate(req.user.id,{
+        $set:
+        { name, description }
+    }, 
+    {new: true}
+);
+    return res.status(200).json({
+        _id: updatedData._id,
+        name: updatedData.name,
+        description: updatedData.description,
+        message: "Category updated successfully"
+    });
+  } catch (error) {
+    console.error("Error updating category:", error);
+    res.status(500).json({ message: "Internal server error" });
+    
+  }
     
 };
 
-export const deleteCategory = (id) => {
+export const deleteCategory = (req, res) => {
+    try {
+        Category.findByIdAndDelete(req.user.id);
+        return res.status(200).json({ message: "Category deleted successfully" });
+      } catch (error) {
+        console.error("Error deleting category:", error);
+        res.status(500).json({ message: "Internal server error" });
+      }
 };
 
-export const getAllCategories = () => {
+export const getAllCategories = (req, res) => {
+    try {
+        const categories = Category.find();
+        return res.status(200).json(categories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        res.status(500).json({ message: "Internal server error" });
+      }
 };
 
