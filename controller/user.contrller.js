@@ -24,7 +24,7 @@ export const updateProfile = async (req, res) => {
         if (!user) {
             return res.status(400).json({ message: "User not found" });
         }
-        await Auth.findByIdAndDelete( req.user._id,{
+        await Auth.findByIdAndUpdate( req.user._id,{
             $set: {
                  name,
                   email 

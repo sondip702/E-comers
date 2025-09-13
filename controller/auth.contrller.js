@@ -67,7 +67,7 @@ export const login = async (req, res) => {
 
         const options = {
                     httpOnly: true,
-                    secure: false, // set to false for local development
+                    secure: false, 
                 };
         return res.status(200)
         .cookie('accessToken', tokens.accessToken, options)

@@ -28,20 +28,33 @@ export const createCategory = async(req, res) => {
   }
 };
 
-export const updateCategory = (req, res) => {
+export const updateCategory = async(req, res) => {
   try {
-    const {name, description} = Category.findByIdAndUpdate(req.user.id,{
+    const {name, description} = req.body;
+    if (!name || !description){
+      return res.status(400).json({ message: "All fields are required" });
+    }
+    const find = await Category.findOne({ name });
+    if (find) {
+      return res.status(400).json({ message: "Category name already exists change it" });
+    }
+    const updateconstr = Category.findByIdAndUpdate(req.params.id,{
         $set:
-        { name, description }
+        { name,
+          description }
     }, 
-    {new: true}
-);
-    return res.status(200).json({
-        _id: updatedData._id,
-        name: updatedData.name,
-        description: updatedData.description,
+    {new: true});
+    const update = await updateconstr;
+    if (update) {
+      return res.status(200).json({
+        _id: update._id,
+        name: update.name,
+        description: update.description,
         message: "Category updated successfully"
-    });
+      });
+    } else {
+      return res.status(404).json({ message: "Category not found" });
+    }
   } catch (error) {
     console.error("Error updating category:", error);
     res.status(500).json({ message: "Internal server error" });

@@ -1,6 +1,5 @@
 import { error } from "console";
 import Cart from "../model/cart.model.js";
-// addToCart(productId, quantity)
 export const addToCart = async (req, res) => {
   
     try {
@@ -35,7 +34,6 @@ export const addToCart = async (req, res) => {
     }
 }
 
-// updateCartItem(cartItemId, quantity)
 export const updateCartItem = async (req, res) => {
     try{
         const { productId, quantity, price } = req.body;
@@ -67,7 +65,6 @@ export const updateCartItem = async (req, res) => {
     }
 }
 
-// removeCartItem(cartItemId)
 export const removeCartItem = async (req, res) => {
     try{        
         const userId = req.user.id;
@@ -87,7 +84,6 @@ export const removeCartItem = async (req, res) => {
     }
 }
 
-// getUserCart()
 export const getUserCart = async (req, res) => {
     try {
         const userId = req.user.id;
