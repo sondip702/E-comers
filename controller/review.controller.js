@@ -38,6 +38,12 @@ export const addOrUpdateReview = async (req, res) => {
     // getReviewsByProduct(productId)
 export const getReviewsForProduct = async (req, res) => {
     try{
+        const { productId } = req.params;
+        const reviews = await Review.find({ product:productId });
+        if (!reviews || reviews.length === 0) {
+            return res.status(404).json({ message: 'No reviews found for this product' });
+        }
+        res.status(200).json({ message: 'Reviews fetched', reviews });
 
     }catch (error) {
         console.error(error);

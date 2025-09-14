@@ -6,6 +6,6 @@ const reviw = express.Router();
 
 reviw.post('/products/:productId', verifyUser, addOrUpdateReview);
 
-reviw.get('/products/:productId', getReviewsForProduct);
+reviw.get('/products', getReviewsForProduct);
 
 export default reviw;
