@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import product from './routes/product.route.js';
 import cart from './routes/cart.route.js';
 import category from './routes/category.route.js';
+import reviw from './routes/review.route.js';
 
 const app = express();
 dotenv.config();
@@ -21,6 +22,7 @@ app.use('/api/user', router);
 app.use('/api/products', product);
 app.use('/api/cart', cart);
 app.use('/api/category', category);
+app.use('/api/review', reviw);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
