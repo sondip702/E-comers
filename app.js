@@ -7,6 +7,7 @@ import product from './routes/product.route.js';
 import cart from './routes/cart.route.js';
 import category from './routes/category.route.js';
 import reviw from './routes/review.route.js';
+import order from './routes/order.route.js';
 
 const app = express();
 dotenv.config();
@@ -23,6 +24,7 @@ app.use('/api/products', product);
 app.use('/api/cart', cart);
 app.use('/api/category', category);
 app.use('/api/review', reviw);
+app.use('/api/order', order);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
