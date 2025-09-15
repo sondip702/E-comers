@@ -1,4 +1,6 @@
 import Review from '../model/review.model.js';
+
+
 export const addOrUpdateReview = async (req, res) => {
     try {
         const { productId } = req.params;
@@ -35,7 +37,6 @@ export const addOrUpdateReview = async (req, res) => {
     }
 }
 
-    // getReviewsByProduct(productId)
 export const getReviewsForProduct = async (req, res) => {
     try{
         const { productId } = req.params;
@@ -51,5 +52,24 @@ export const getReviewsForProduct = async (req, res) => {
     }
 }
 
-    // deleteReview(reviewId)
+export const deleteReview = async (req, res) => {
+    try {
+        const { reviewId } = req.params;
+        const userId = req.user.id;
+
+        const review = await Review.findById(reviewId);
+        
+        if (!review) {
+            return res.status(404).json({ message: 'Review not found' });
+        }
+        if (review.user.toString() !== userId) {
+            return res.status(403).json({ message: 'Unauthorized' });
+        }
+        await Review.findByIdAndDelete(reviewId);
+        res.status(200).json({ message: 'Review deleted' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+}
 
